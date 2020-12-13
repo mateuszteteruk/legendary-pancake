@@ -12,19 +12,21 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.loadImageResource
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun RecipeCard(recipe: Recipe, modifier: Modifier) {
     Surface(modifier = modifier, shape = RoundedCornerShape(8.dp), elevation = 8.dp) {
-        val image = imageResource(id = recipe.imageResource)
+        val deferredResource = loadImageResource(id = recipe.imageResource)
         Column(modifier = Modifier.fillMaxWidth()) {
-            Image(
-                bitmap = image,
-                modifier = Modifier.fillMaxWidth().height(188.dp),
-                contentScale = ContentScale.FillWidth
-            )
+            deferredResource.resource.resource?.let {
+                Image(
+                    bitmap = it,
+                    modifier = Modifier.fillMaxWidth().height(188.dp),
+                    contentScale = ContentScale.FillWidth
+                )
+            }
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(text = recipe.title, style = MaterialTheme.typography.h4)
                 recipe.ingredients.forEach {
