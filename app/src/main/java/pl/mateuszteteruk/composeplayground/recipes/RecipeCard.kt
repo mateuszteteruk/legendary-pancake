@@ -16,8 +16,8 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RecipeCard(recipe: Recipe) {
-    Surface(modifier = Modifier.padding(8.dp), shape = RoundedCornerShape(8.dp), elevation = 8.dp) {
+fun RecipeCard(recipe: Recipe, modifier: Modifier) {
+    Surface(modifier = modifier, shape = RoundedCornerShape(8.dp), elevation = 8.dp) {
         val image = imageResource(id = recipe.imageResource)
         Column(modifier = Modifier.fillMaxWidth()) {
             Image(
