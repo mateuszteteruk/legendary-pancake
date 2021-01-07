@@ -25,7 +25,7 @@ fun FavouriteButton(transitionState: TransitionState, onCLick: () -> Unit) {
     Button(
         border = BorderStroke(1.dp, MaterialTheme.colors.primary),
         colors = ButtonConstants.defaultOutlinedButtonColors(),
-        shape = RoundedCornerShape(6.dp),
+        shape = RoundedCornerShape(transitionState[corners]),
         modifier = Modifier.size(transitionState[width], 60.dp),
         onClick = {
             onCLick()

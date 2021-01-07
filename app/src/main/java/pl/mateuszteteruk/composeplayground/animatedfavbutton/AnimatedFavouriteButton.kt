@@ -14,15 +14,19 @@ fun AnimatedFavouriteButton() {
     val transitionDefinition = transitionDefinition<State> {
         state(name = State.Idle) {
             this[width] = 300.dp
+            this[corners] = 6
         }
         state(name = State.Pressed) {
             this[width] = 60.dp
+            this[corners] = 48
         }
         transition(fromState = State.Idle, toState = State.Pressed) {
             width using tween(durationMillis = 1500)
+            corners using tween(durationMillis = 1500)
         }
         transition(fromState = State.Pressed, toState = State.Idle) {
             width using tween(durationMillis = 1500)
+            corners using tween(durationMillis = 1500)
         }
     }
     val transitionState = transition(
