@@ -1,5 +1,6 @@
 package pl.mateuszteteruk.composeplayground.animatedfavbutton
 
+import androidx.compose.animation.core.TransitionState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,13 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun FavouriteButton() {
+fun FavouriteButton(transitionState: TransitionState, onCLick: () -> Unit) {
     Button(
         border = BorderStroke(1.dp, MaterialTheme.colors.primary),
         colors = ButtonConstants.defaultOutlinedButtonColors(),
         shape = RoundedCornerShape(6.dp),
-        modifier = Modifier.size(300.dp, 60.dp),
-        onClick = {}
+        modifier = Modifier.size(transitionState[width], 60.dp),
+        onClick = {
+            onCLick()
+        }
     ) {
         FavouriteTextWithIcon()
     }
