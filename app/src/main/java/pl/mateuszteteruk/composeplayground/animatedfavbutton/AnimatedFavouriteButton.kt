@@ -1,5 +1,6 @@
 package pl.mateuszteteruk.composeplayground.animatedfavbutton
 
+import androidx.compose.animation.core.TransitionDefinition
 import androidx.compose.animation.core.transitionDefinition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.transition
@@ -20,14 +21,8 @@ fun AnimatedFavouriteButton() {
             this[width] = 60.dp
             this[corners] = 48
         }
-        transition(fromState = State.Idle, toState = State.Pressed) {
-            width using tween(durationMillis = 1500)
-            corners using tween(durationMillis = 1500)
-        }
-        transition(fromState = State.Pressed, toState = State.Idle) {
-            width using tween(durationMillis = 1500)
-            corners using tween(durationMillis = 1500)
-        }
+        transition(from = State.Idle, to = State.Pressed)
+        transition(from = State.Pressed, to = State.Idle)
     }
     val transitionState = transition(
         definition = transitionDefinition,
@@ -38,6 +33,17 @@ fun AnimatedFavouriteButton() {
         currentState.value = currentState.value.reverse()
     }
     FavouriteButton(transitionState, onCLick)
+}
+
+private fun TransitionDefinition<State>.transition(
+    from: State,
+    to: State,
+    duration: Int = 1500
+) {
+    transition(fromState = from, toState = to) {
+        width using tween(durationMillis = duration)
+        corners using tween(durationMillis = duration)
+    }
 }
 
 enum class State {
