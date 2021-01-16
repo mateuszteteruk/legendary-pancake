@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonConstants
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -24,23 +24,23 @@ import androidx.compose.ui.unit.dp
 fun FavouriteButton(transitionState: TransitionState, onCLick: () -> Unit) {
     Button(
         border = BorderStroke(1.dp, MaterialTheme.colors.primary),
-        colors = ButtonConstants.defaultOutlinedButtonColors(),
+        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = transitionState[backgroundColor]),
         shape = RoundedCornerShape(transitionState[corners]),
         modifier = Modifier.size(transitionState[width], 60.dp),
         onClick = {
             onCLick()
         }
     ) {
-        FavouriteTextWithIcon()
+        FavouriteTextWithIcon(transitionState)
     }
 }
 
 @Composable
-fun FavouriteTextWithIcon() {
+fun FavouriteTextWithIcon(transitionState: TransitionState) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.width(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
-                tint = MaterialTheme.colors.primary,
+                tint = transitionState[textColor],
                 imageVector = Icons.Default.FavoriteBorder,
                 modifier = Modifier.size(24.dp)
             )
@@ -49,7 +49,7 @@ fun FavouriteTextWithIcon() {
         Text(
             "ADD TO FAVORITES!",
             softWrap = false,
-            color = MaterialTheme.colors.primary
+            color = transitionState[textColor]
         )
     }
 }
