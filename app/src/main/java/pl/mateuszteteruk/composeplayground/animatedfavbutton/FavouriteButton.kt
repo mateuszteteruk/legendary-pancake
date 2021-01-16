@@ -58,7 +58,7 @@ fun FavouriteTextWithIcon(transitionState: TransitionState, currentState: Mutabl
         }
         Spacer(modifier = Modifier.width(16.dp))
         Text(
-            "ADD TO FAVORITES!",
+            "FAVOURITE",
             softWrap = false,
             color = transitionState[textColor],
             modifier = Modifier.alpha(transitionState[textOpacity])
