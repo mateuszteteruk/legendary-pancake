@@ -2,6 +2,7 @@ package pl.mateuszteteruk.composeplayground.animatedfavbutton
 
 import androidx.compose.animation.core.TransitionDefinition
 import androidx.compose.animation.core.TransitionSpec
+import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.transitionDefinition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.transition
@@ -24,6 +25,7 @@ fun AnimatedFavouriteButton() {
             this[backgroundColor] = background
             this[textColor] = primary
             this[textOpacity] = 1f
+            this[pressedHeartSize] = 24.dp
         }
         state(name = State.Pressed) {
             this[width] = 60.dp
@@ -31,9 +33,16 @@ fun AnimatedFavouriteButton() {
             this[backgroundColor] = primary
             this[textColor] = background
             this[textOpacity] = 0f
+            this[pressedHeartSize] = 24.dp
         }
         transition(from = State.Idle, to = State.Pressed) {
             textOpacity using tween(durationMillis = 1000)
+            pressedHeartSize using keyframes {
+                durationMillis = 2200
+                24.dp at 1700
+                12.dp at 1900
+            }
+
         }
         transition(from = State.Pressed, to = State.Idle) {
             textOpacity using tween(durationMillis = 3000)

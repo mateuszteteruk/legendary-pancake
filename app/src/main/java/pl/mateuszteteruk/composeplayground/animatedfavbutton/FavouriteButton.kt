@@ -49,7 +49,7 @@ fun FavouriteTextWithIcon(transitionState: TransitionState, currentState: Mutabl
             Icon(
                 tint = transitionState[textColor],
                 imageVector = icon,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(transitionState[pressedHeartSize])
             )
         }
         Spacer(modifier = Modifier.width(16.dp))
