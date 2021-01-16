@@ -1,7 +1,9 @@
 package pl.mateuszteteruk.composeplayground.animatedfavbutton
 
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.TransitionDefinition
 import androidx.compose.animation.core.TransitionSpec
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.transitionDefinition
 import androidx.compose.animation.core.tween
@@ -26,6 +28,7 @@ fun AnimatedFavouriteButton() {
             this[textColor] = primary
             this[textOpacity] = 1f
             this[pressedHeartSize] = 24.dp
+            this[idleHeartSize] = 24.dp
         }
         state(name = State.Pressed) {
             this[width] = 60.dp
@@ -34,6 +37,7 @@ fun AnimatedFavouriteButton() {
             this[textColor] = background
             this[textOpacity] = 0f
             this[pressedHeartSize] = 24.dp
+            this[idleHeartSize] = 24.dp
         }
         transition(from = State.Idle, to = State.Pressed) {
             textOpacity using tween(durationMillis = 1000)
@@ -46,6 +50,16 @@ fun AnimatedFavouriteButton() {
         }
         transition(from = State.Pressed, to = State.Idle) {
             textOpacity using tween(durationMillis = 3000)
+            idleHeartSize using infiniteRepeatable(
+                animation = keyframes {
+                    durationMillis = 2000
+                    24.dp at 1400
+                    18.dp at 1500
+                    24.dp at 1600
+                    18.dp at 1700
+                },
+                repeatMode = RepeatMode.Restart
+            )
         }
     }
     val transitionState = transition(

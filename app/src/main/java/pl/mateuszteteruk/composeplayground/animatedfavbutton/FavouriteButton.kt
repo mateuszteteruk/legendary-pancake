@@ -44,12 +44,16 @@ fun FavouriteTextWithIcon(transitionState: TransitionState, currentState: Mutabl
         State.Idle -> Icons.Default.Favorite
         State.Pressed -> Icons.Default.FavoriteBorder
     }
+    val iconTransition = when (currentState.value) {
+        State.Idle -> transitionState[pressedHeartSize]
+        State.Pressed -> transitionState[idleHeartSize]
+    }
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.width(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
                 tint = transitionState[textColor],
                 imageVector = icon,
-                modifier = Modifier.size(transitionState[pressedHeartSize])
+                modifier = Modifier.size(iconTransition)
             )
         }
         Spacer(modifier = Modifier.width(16.dp))
