@@ -17,14 +17,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun FavouriteButton(transitionState: TransitionState, onCLick: () -> Unit, currentState: MutableState<State>) {
+fun FavouriteButton(
+    transitionState: TransitionState,
+    onCLick: () -> Unit,
+    currentButtonState: State<ButtonState>
+) {
     Button(
         border = BorderStroke(1.dp, MaterialTheme.colors.primary),
         colors = ButtonDefaults.outlinedButtonColors(backgroundColor = transitionState[backgroundColor]),
@@ -34,19 +38,15 @@ fun FavouriteButton(transitionState: TransitionState, onCLick: () -> Unit, curre
             onCLick()
         }
     ) {
-        FavouriteTextWithIcon(transitionState, currentState)
+        FavouriteTextWithIcon(transitionState, currentButtonState)
     }
 }
 
 @Composable
-fun FavouriteTextWithIcon(transitionState: TransitionState, currentState: MutableState<State>) {
-    val icon = when (currentState.value) {
-        State.Idle -> Icons.Default.Favorite
-        State.Pressed -> Icons.Default.FavoriteBorder
-    }
-    val iconTransition = when (currentState.value) {
-        State.Idle -> transitionState[pressedHeartSize]
-        State.Pressed -> transitionState[idleHeartSize]
+fun FavouriteTextWithIcon(transitionState: TransitionState, currentButtonState: State<ButtonState>) {
+    val (icon, iconTransition) = when (currentButtonState.value) {
+        ButtonState.Idle -> Icons.Default.Favorite to transitionState[pressedHeartSize]
+        ButtonState.Pressed -> Icons.Default.FavoriteBorder to transitionState[idleHeartSize]
     }
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.width(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {

@@ -17,11 +17,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun AnimatedFavouriteButton() {
-    val currentState = remember { mutableStateOf(State.Pressed) }
+    val currentState = remember { mutableStateOf(ButtonState.Pressed) }
     val primary = MaterialTheme.colors.primary
     val background = Color.White
-    val transitionDefinition = transitionDefinition<State> {
-        state(name = State.Idle) {
+    val transitionDefinition = transitionDefinition<ButtonState> {
+        state(name = ButtonState.Idle) {
             this[width] = 300.dp
             this[corners] = 6
             this[backgroundColor] = background
@@ -30,7 +30,7 @@ fun AnimatedFavouriteButton() {
             this[pressedHeartSize] = 24.dp
             this[idleHeartSize] = 24.dp
         }
-        state(name = State.Pressed) {
+        state(name = ButtonState.Pressed) {
             this[width] = 60.dp
             this[corners] = 48
             this[backgroundColor] = primary
@@ -39,7 +39,7 @@ fun AnimatedFavouriteButton() {
             this[pressedHeartSize] = 24.dp
             this[idleHeartSize] = 24.dp
         }
-        transition(from = State.Idle, to = State.Pressed) {
+        transition(from = ButtonState.Idle, to = ButtonState.Pressed) {
             textOpacity using tween(durationMillis = 1000)
             pressedHeartSize using keyframes {
                 durationMillis = 2200
@@ -48,7 +48,7 @@ fun AnimatedFavouriteButton() {
             }
 
         }
-        transition(from = State.Pressed, to = State.Idle) {
+        transition(from = ButtonState.Pressed, to = ButtonState.Idle) {
             textOpacity using tween(durationMillis = 3000)
             idleHeartSize using infiniteRepeatable(
                 animation = keyframes {
@@ -73,11 +73,11 @@ fun AnimatedFavouriteButton() {
     FavouriteButton(transitionState, onCLick, currentState)
 }
 
-private fun TransitionDefinition<State>.transition(
-    from: State,
-    to: State,
+private fun TransitionDefinition<ButtonState>.transition(
+    from: ButtonState,
+    to: ButtonState,
     duration: Int = 1500,
-    block: TransitionSpec<State>.() -> Unit = {}
+    block: TransitionSpec<ButtonState>.() -> Unit = {}
 ) {
     transition(fromState = from, toState = to) {
         width using tween(durationMillis = duration)
@@ -88,10 +88,10 @@ private fun TransitionDefinition<State>.transition(
     }
 }
 
-enum class State {
+enum class ButtonState {
     Idle, Pressed;
 
-    fun reverse(): State =
+    fun reverse(): ButtonState =
         when (this) {
             Idle -> Pressed
             Pressed -> Idle
