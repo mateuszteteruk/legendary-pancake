@@ -1,9 +1,10 @@
 package pl.mateuszteteruk.composeplayground
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.platform.setContent
-import pl.mateuszteteruk.composeplayground.animatedfavbutton.AnimatedFavouriteButton
+import pl.mateuszteteruk.composeplayground.recipes.RecipeList
+import pl.mateuszteteruk.composeplayground.recipes.defaultRecipes
 import pl.mateuszteteruk.composeplayground.ui.ComposePlaygroundTheme
 import pl.mateuszteteruk.composeplayground.utils.CenteredColumn
 
@@ -14,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             ComposePlaygroundTheme {
                 CenteredColumn {
-                    AnimatedFavouriteButton()
+                    RecipeList(recipes = defaultRecipes)
                 }
             }
         }
