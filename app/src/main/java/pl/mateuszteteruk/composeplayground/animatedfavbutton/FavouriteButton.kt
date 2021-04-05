@@ -1,6 +1,5 @@
 package pl.mateuszteteruk.composeplayground.animatedfavbutton
 
-import androidx.compose.animation.core.TransitionState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,43 +24,44 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun FavouriteButton(
-    transitionState: TransitionState,
+    transitionData: TransitionData,
     onCLick: () -> Unit,
     currentButtonState: State<ButtonState>
 ) {
     Button(
         border = BorderStroke(1.dp, MaterialTheme.colors.primary),
-        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = transitionState[backgroundColor]),
-        shape = RoundedCornerShape(transitionState[corners]),
-        modifier = Modifier.size(transitionState[width], 60.dp),
+        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = transitionData.backgroundColor),
+        shape = RoundedCornerShape(transitionData.corners),
+        modifier = Modifier.size(transitionData.width, 60.dp),
         onClick = {
             onCLick()
         }
     ) {
-        FavouriteTextWithIcon(transitionState, currentButtonState)
+        FavouriteTextWithIcon(transitionData, currentButtonState)
     }
 }
 
 @Composable
-fun FavouriteTextWithIcon(transitionState: TransitionState, currentButtonState: State<ButtonState>) {
+fun FavouriteTextWithIcon(transitionData: TransitionData, currentButtonState: State<ButtonState>) {
     val (icon, iconTransition) = when (currentButtonState.value) {
-        ButtonState.Idle -> Icons.Default.Favorite to transitionState[pressedHeartSize]
-        ButtonState.Pressed -> Icons.Default.FavoriteBorder to transitionState[idleHeartSize]
+        ButtonState.Idle -> Icons.Default.Favorite to transitionData.pressedHeartSize
+        ButtonState.Pressed -> Icons.Default.FavoriteBorder to transitionData.idleHeartSize
     }
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.width(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
-                tint = transitionState[textColor],
                 imageVector = icon,
-                modifier = Modifier.size(iconTransition)
+                contentDescription = "Icon",
+                modifier = Modifier.size(iconTransition),
+                tint = transitionData.textColor
             )
         }
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             "FAVOURITE",
             softWrap = false,
-            color = transitionState[textColor],
-            modifier = Modifier.alpha(transitionState[textOpacity])
+            color = transitionData.textColor,
+            modifier = Modifier.alpha(transitionData.textOpacity)
         )
     }
 }
