@@ -3,6 +3,7 @@ package pl.mateuszteteruk.composeplayground.lazyliststate
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -21,7 +22,7 @@ fun LazyListStateExample() {
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
             backgroundColor = MaterialTheme.colors.surface,
-            elevation = state.elevationSimple
+            elevation = state.elevationComplex()
         ) {
             Text(text = "LazyListStateExample", modifier = Modifier.padding(8.dp))
         }
@@ -32,7 +33,8 @@ fun LazyListStateExample() {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
+                        .padding(8.dp)
+                        .height(40.dp),
                     text = "Item #$it"
                 )
             }
@@ -47,4 +49,18 @@ private val LazyListState.elevationSimple: Dp
         LIFTED_ELEVATION
     }
 
+@Composable
+private fun LazyListState.elevationComplex(): Dp {
+    val firstVisibleItemInfo = layoutInfo.visibleItemsInfo.firstOrNull()
+    return when {
+        firstVisibleItemIndex != 0 -> LIFTED_ELEVATION
+        firstVisibleItemIndex == 0 && firstVisibleItemInfo != null -> {
+            val offset = firstVisibleItemScrollOffset.toFloat() / firstVisibleItemInfo.size.toFloat()
+            LIFTED_ELEVATION * offset
+        }
+        else -> DEFAULT_ELEVATION
+    }
+}
+
+private val DEFAULT_ELEVATION = 0.dp
 private val LIFTED_ELEVATION = 24.dp
