@@ -13,6 +13,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -21,7 +23,7 @@ fun LazyListStateExample() {
     val state: LazyListState = rememberLazyListState()
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
-            backgroundColor = MaterialTheme.colors.surface,
+            backgroundColor = MaterialTheme.colors.background,
             elevation = state.elevationComplex()
         ) {
             Text(text = "LazyListStateExample", modifier = Modifier.padding(8.dp))
@@ -64,3 +66,19 @@ private fun LazyListState.elevationComplex(): Dp {
 
 private val DEFAULT_ELEVATION = 0.dp
 private val LIFTED_ELEVATION = 24.dp
+
+@Composable
+private fun LazyListState.backgroundColor(): Color {
+    val firstVisibleItemInfo = layoutInfo.visibleItemsInfo.firstOrNull()
+    val fraction = when {
+        firstVisibleItemIndex != 0 -> 1F
+        firstVisibleItemIndex == 0 && firstVisibleItemInfo != null ->
+            firstVisibleItemScrollOffset.toFloat() / firstVisibleItemInfo.size.toFloat()
+        else -> 0F
+    }
+    return lerp(
+        start = MaterialTheme.colors.primary,
+        stop = MaterialTheme.colors.secondary,
+        fraction = fraction
+    )
+}
