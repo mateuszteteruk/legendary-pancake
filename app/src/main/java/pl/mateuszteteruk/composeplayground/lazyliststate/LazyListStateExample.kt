@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 fun LazyListStateExample() {
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar {
-            Text(text = "LazyListStateExample")
+            Text(text = "LazyListStateExample",modifier=Modifier.padding(8.dp))
         }
         LazyColumn {
             items(50) {
