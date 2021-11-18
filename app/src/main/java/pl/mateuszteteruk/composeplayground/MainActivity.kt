@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import pl.mateuszteteruk.composeplayground.dropdownmenu.DropdownMenuExample
-import pl.mateuszteteruk.composeplayground.lazyliststate.LazyListStateExample
+import pl.mateuszteteruk.composeplayground.navigation.SongsNavigation
 import pl.mateuszteteruk.composeplayground.ui.ComposePlaygroundTheme
-import pl.mateuszteteruk.composeplayground.utils.CenteredColumn
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,7 +23,7 @@ class MainActivity : AppCompatActivity() {
                     modifier = Modifier.fillMaxWidth().fillMaxHeight(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    DropdownMenuExample()
+                    SongsNavigation()
                 }
             }
         }
