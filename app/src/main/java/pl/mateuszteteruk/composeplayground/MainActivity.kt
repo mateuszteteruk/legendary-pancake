@@ -3,6 +3,7 @@ package pl.mateuszteteruk.composeplayground
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,12 +16,15 @@ import pl.mateuszteteruk.composeplayground.ui.ComposePlaygroundTheme
 class MainActivity : AppCompatActivity() {
 
     @ExperimentalMaterialApi
+    @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ComposePlaygroundTheme {
                 Column(
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     SongsNavigation()
