@@ -43,9 +43,7 @@ fun Modifier.snow(): Modifier = composed {
     var snowflakesState by remember {
         mutableStateOf(
             SnowfallState(
-                listOf(
-                    Snowflake(size = 100F, position = Offset(650F, 250F))
-                )
+                listOf()
             )
         )
     }
@@ -100,8 +98,9 @@ data class SnowfallState(
             val count = (canvasSize.area * density / DENSITY_DIVIDER).roundToInt()
             return List(count) {
                 Snowflake(
-                    size = sizeRange.random(),
+                    radius = sizeRange.random(),
                     position = canvasSize.randomPosition(),
+                    canvasSize = canvasSize,
                 )
             }
         }
@@ -123,7 +122,8 @@ data class SnowfallState(
 }
 
 class Snowflake(
-    private val size: Float = 100F,
+    private val radius: Float = 100F,
+    private val canvasSize: IntSize,
     position: Offset,
 ) {
 
@@ -136,11 +136,18 @@ class Snowflake(
     private var position by mutableStateOf(position)
 
     fun draw(canvas: Canvas) {
-        canvas.drawCircle(position, size, paint)
+        canvas.drawCircle(
+            center = position,
+            radius = radius,
+            paint = paint
+        )
     }
 
     fun update() {
         position = Offset(position.x, position.y + 1)
+        if (position.y - radius > canvasSize.height) {
+            position = position.copy(y = -radius)
+        }
     }
 }
 
