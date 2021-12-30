@@ -48,11 +48,20 @@ fun Modifier.snow(): Modifier = composed {
         )
     }
 
+    var lastTick by remember { mutableStateOf(-1L) }
+
     LaunchedEffect(Unit) {
         while (isActive) {
             withFrameMillis { newTick ->
+                if (lastTick < 0) {
+                    lastTick = newTick
+                    return@withFrameMillis
+                }
+                val elapsed = newTick - lastTick
+                lastTick = newTick
+
                 snowflakesState.snowflakes.forEach {
-                    it.update()
+                    it.update(elapsed)
                 }
             }
         }
@@ -143,11 +152,18 @@ class Snowflake(
         )
     }
 
-    fun update() {
-        position = Offset(position.x, position.y + 1)
+    fun update(elapsed: Long) {
+        val deltaY = (elapsed / frameDurationAt60Fps) * baseSpeedAt60Fps
+        position = Offset(position.x, position.y + deltaY)
         if (position.y - radius > canvasSize.height) {
             position = position.copy(y = -radius)
         }
+    }
+
+    private companion object {
+
+        const val frameDurationAt60Fps = 16F
+        const val baseSpeedAt60Fps = 2F
     }
 }
 
