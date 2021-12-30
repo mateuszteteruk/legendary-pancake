@@ -1,5 +1,6 @@
 package pl.mateuszteteruk.composeplayground.snowflakes
 
+import androidx.annotation.FloatRange
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.roundToInt
 
 @Composable
 fun Snowflakes() {
@@ -57,20 +59,32 @@ fun Modifier.snow(): Modifier = composed {
 data class SnowfallState(
     val snowflakes: List<Snowflake>,
     val sizeRange: ClosedRange<Float> = 5F..12F,
+    @FloatRange(from = 0.0, to = 1.0) val density: Float = .1F,
 ) {
+
+    init {
+        require(density in 0F..1F) { "Density must be between 0F - 1F" }
+    }
 
     fun resize(size: IntSize): SnowfallState =
         copy(
             snowflakes = createSnowflakes(
                 sizeRange = sizeRange,
-                canvasSize = size
+                canvasSize = size,
+                density = density,
             )
         )
 
     private companion object {
 
-        fun createSnowflakes(sizeRange: ClosedRange<Float>, canvasSize: IntSize): List<Snowflake> {
-            val count = 100
+        private const val DENSITY_DIVIDER = 500F
+
+        fun createSnowflakes(
+            sizeRange: ClosedRange<Float>,
+            canvasSize: IntSize,
+            density: Float,
+        ): List<Snowflake> {
+            val count = (canvasSize.area * density / DENSITY_DIVIDER).roundToInt()
             return List(count) {
                 Snowflake(
                     size = sizeRange.random(),
@@ -89,9 +103,11 @@ data class SnowfallState(
             )
 
         private fun Int.random(): Int = ThreadLocalRandom.current().nextInt(this)
+
+        private val IntSize.area: Int
+            get() = width * height
     }
 }
-
 
 class Snowflake(
     private val size: Float = 100F,
