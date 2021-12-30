@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Canvas
@@ -69,16 +70,19 @@ fun Modifier.snow(): Modifier = composed {
 
     onSizeChanged { size ->
         snowflakesState = snowflakesState.resize(size)
-    }.drawWithContent {
-        drawContent()
-        val canvas = drawContext.canvas
-        snowflakesState.snowflakes.forEach { it.draw(canvas = canvas) }
     }
+        .clipToBounds()
+        .drawWithContent {
+            drawContent()
+            val canvas = drawContext.canvas
+            snowflakesState.snowflakes.forEach { it.draw(canvas = canvas) }
+        }
 }
 
 data class SnowfallState(
     val snowflakes: List<Snowflake>,
     val sizeRange: ClosedRange<Float> = 5F..12F,
+    val incrementFactorRange: ClosedRange<Float> = 0.4F..0.8F,
     @FloatRange(from = 0.0, to = 1.0) val density: Float = .1F,
 ) {
 
@@ -92,6 +96,7 @@ data class SnowfallState(
                 sizeRange = sizeRange,
                 canvasSize = size,
                 density = density,
+                incrementFactorRange = incrementFactorRange,
             )
         )
 
@@ -101,6 +106,7 @@ data class SnowfallState(
 
         fun createSnowflakes(
             sizeRange: ClosedRange<Float>,
+            incrementFactorRange: ClosedRange<Float>,
             canvasSize: IntSize,
             density: Float,
         ): List<Snowflake> {
@@ -110,6 +116,7 @@ data class SnowfallState(
                     radius = sizeRange.random(),
                     position = canvasSize.randomPosition(),
                     canvasSize = canvasSize,
+                    incrementFactor = incrementFactorRange.random(),
                 )
             }
         }
@@ -134,12 +141,14 @@ class Snowflake(
     private val radius: Float = 100F,
     private val canvasSize: IntSize,
     position: Offset,
+    private val incrementFactor: Float,
 ) {
 
     var paint = Paint().apply {
         isAntiAlias = true
         color = Color.White
         style = PaintingStyle.Fill
+        alpha = incrementFactor
     }
 
     private var position by mutableStateOf(position)
@@ -153,7 +162,7 @@ class Snowflake(
     }
 
     fun update(elapsed: Long) {
-        val deltaY = (elapsed / frameDurationAt60Fps) * baseSpeedAt60Fps
+        val deltaY = incrementFactor * (elapsed / frameDurationAt60Fps) * baseSpeedAt60Fps
         position = Offset(position.x, position.y + deltaY)
         if (position.y - radius > canvasSize.height) {
             position = position.copy(y = -radius)
