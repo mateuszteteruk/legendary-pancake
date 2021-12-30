@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
@@ -22,6 +24,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.isActive
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.roundToInt
 
@@ -45,6 +48,16 @@ fun Modifier.snow(): Modifier = composed {
                 )
             )
         )
+    }
+
+    LaunchedEffect(Unit) {
+        while (isActive) {
+            withFrameMillis { newTick ->
+                snowflakesState.snowflakes.forEach {
+                    it.update()
+                }
+            }
+        }
     }
 
     onSizeChanged { size ->
@@ -111,7 +124,7 @@ data class SnowfallState(
 
 class Snowflake(
     private val size: Float = 100F,
-    private val position: Offset,
+    position: Offset,
 ) {
 
     var paint = Paint().apply {
@@ -120,8 +133,14 @@ class Snowflake(
         style = PaintingStyle.Fill
     }
 
+    private var position by mutableStateOf(position)
+
     fun draw(canvas: Canvas) {
         canvas.drawCircle(position, size, paint)
+    }
+
+    fun update() {
+        position = Offset(position.x, position.y + 1)
     }
 }
 
