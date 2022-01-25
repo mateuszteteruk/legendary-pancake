@@ -11,6 +11,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import pl.mateuszteteruk.composeplayground.navigation.SongsNavigation
+import pl.mateuszteteruk.composeplayground.snowflakes.Snowflakes
 import pl.mateuszteteruk.composeplayground.ui.ComposePlaygroundTheme
 
 class MainActivity : AppCompatActivity() {
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
                         .fillMaxHeight(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    SongsNavigation()
+                    Snowflakes()
                 }
             }
         }

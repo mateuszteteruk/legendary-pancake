@@ -27,7 +27,10 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.isActive
 import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.absoluteValue
+import kotlin.math.cos
 import kotlin.math.roundToInt
+import kotlin.math.sin
 
 @Composable
 fun Snowflakes() {
@@ -83,6 +86,7 @@ data class SnowfallState(
     val snowflakes: List<Snowflake>,
     val sizeRange: ClosedRange<Float> = 5F..12F,
     val incrementFactorRange: ClosedRange<Float> = 0.4F..0.8F,
+    val angleRange: ClosedRange<Float> = -25F..25F,
     @FloatRange(from = 0.0, to = 1.0) val density: Float = .1F,
 ) {
 
@@ -97,6 +101,7 @@ data class SnowfallState(
                 canvasSize = size,
                 density = density,
                 incrementFactorRange = incrementFactorRange,
+                angleRange = angleRange,
             )
         )
 
@@ -107,6 +112,7 @@ data class SnowfallState(
         fun createSnowflakes(
             sizeRange: ClosedRange<Float>,
             incrementFactorRange: ClosedRange<Float>,
+            angleRange: ClosedRange<Float>,
             canvasSize: IntSize,
             density: Float,
         ): List<Snowflake> {
@@ -115,6 +121,7 @@ data class SnowfallState(
                 Snowflake(
                     radius = sizeRange.random(),
                     position = canvasSize.randomPosition(),
+                    angle = angleRange.random(),
                     canvasSize = canvasSize,
                     incrementFactor = incrementFactorRange.random(),
                 )
@@ -141,6 +148,7 @@ class Snowflake(
     private val radius: Float = 100F,
     private val canvasSize: IntSize,
     position: Offset,
+    angle: Float,
     private val incrementFactor: Float,
 ) {
 
@@ -152,6 +160,7 @@ class Snowflake(
     }
 
     private var position by mutableStateOf(position)
+    private var angle by mutableStateOf(angle)
 
     fun draw(canvas: Canvas) {
         canvas.drawCircle(
@@ -162,10 +171,15 @@ class Snowflake(
     }
 
     fun update(elapsed: Long) {
-        val deltaY = incrementFactor * (elapsed / frameDurationAt60Fps) * baseSpeedAt60Fps
-        position = Offset(position.x, position.y + deltaY)
+        val increment = incrementFactor * (elapsed / frameDurationAt60Fps) * baseSpeedAt60Fps
+        val deltaX = increment * cos(angle)
+        val deltaY = increment * sin(angle).absoluteValue
+        position = Offset(position.x + deltaX, position.y + deltaY)
         if (position.y - radius > canvasSize.height) {
             position = position.copy(y = -radius)
+        }
+        if (position.x < -radius || position.x - radius > canvasSize.width) {
+            position = position.copy(x = -canvasSize.width.ra)
         }
     }
 
