@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "pl.mateuszteteruk.composeplayground"
         minSdkVersion 23
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
 
@@ -28,38 +28,38 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-        useIR = true
     }
     buildFeatures {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion = "1.3.2"
     }
+    namespace 'pl.mateuszteteruk.composeplayground'
 }
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling:$compose_version"
-    implementation "androidx.compose.ui:ui-util:$compose_version"
-    implementation "androidx.compose.ui:ui-unit:$compose_version"
-    implementation "androidx.compose.ui:ui-text:$compose_version"
-    implementation "androidx.compose.ui:ui-geometry:$compose_version"
-    implementation "androidx.compose.ui:ui-graphics:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-data:$compose_version"
-    implementation "androidx.compose.ui:ui-viewbinding:$compose_version"
-    implementation "androidx.compose.animation:animation:$compose_version"
-    implementation "androidx.compose.animation:animation-core:$compose_version"
-    implementation "androidx.activity:activity-compose:1.4.0"
-    implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.compose.foundation:foundation:$compose_version"
-    implementation "androidx.compose.foundation:foundation-layout:$compose_version"
-    implementation "androidx.compose.runtime:runtime:$compose_version"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
-    implementation "androidx.navigation:navigation-compose:2.4.0-beta02"
-    implementation "com.google.accompanist:accompanist-navigation-animation:0.21.3-beta"
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.7.0'
+    implementation "androidx.compose.ui:ui:1.4.0-alpha02"
+    implementation "androidx.compose.ui:ui-tooling:1.4.0-alpha02"
+    implementation "androidx.compose.ui:ui-util:1.4.0-alpha02"
+    implementation "androidx.compose.ui:ui-unit:1.4.0-alpha02"
+    implementation "androidx.compose.ui:ui-text:1.4.0-alpha02"
+    implementation "androidx.compose.ui:ui-geometry:1.4.0-alpha02"
+    implementation "androidx.compose.ui:ui-graphics:1.4.0-alpha02"
+    implementation "androidx.compose.ui:ui-tooling-data:1.4.0-alpha02"
+    implementation "androidx.compose.ui:ui-viewbinding:1.4.0-alpha02"
+    implementation "androidx.compose.animation:animation:1.4.0-alpha02"
+    implementation "androidx.compose.animation:animation-core:1.4.0-alpha02"
+    implementation "androidx.activity:activity-compose:1.6.1"
+    implementation "androidx.compose.material:material:1.4.0-alpha02"
+    implementation "androidx.compose.foundation:foundation:1.4.0-alpha02"
+    implementation "androidx.compose.foundation:foundation-layout:1.4.0-alpha02"
+    implementation "androidx.compose.runtime:runtime:1.4.0-alpha02"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation "androidx.navigation:navigation-compose:2.6.0-alpha04"
+    implementation "com.google.accompanist:accompanist-navigation-animation:0.26.5-rc"
 }
