@@ -4,22 +4,16 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
+import androidx.compose.animation.core.withInfiniteAnimationFrameMillis
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Surface
-import androidx.compose.ui.Alignment
+import androidx.compose.material.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import pl.mateuszteteruk.composeplayground.modifiers.tiltOnTouch
+import pl.mateuszteteruk.composeplayground.modifiers.waveBackground
 import pl.mateuszteteruk.composeplayground.ui.ComposePlaygroundTheme
 
 class MainActivity : AppCompatActivity() {
@@ -30,26 +24,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposePlaygroundTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .waveBackground(color = Color.Red),
                 ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Card(
-                            modifier = Modifier
-                                .size(width = 300.dp, height = 400.dp)
-                                .tiltOnTouch(),
-                            shape = RoundedCornerShape(24.dp),
-                            border = BorderStroke(2.dp, Color.Black)
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.smoothie),
-                                contentScale = ContentScale.FillWidth,
-                                contentDescription = "",
-                            )
+                    val time by produceState(0f) {
+                        while (true) {
+                            withInfiniteAnimationFrameMillis {
+                                value = it / 1000f
+                            }
                         }
                     }
+                    Text(text = "Text: $time")
                 }
             }
         }
